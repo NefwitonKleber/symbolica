@@ -1,0 +1,528 @@
+\documentclass[12pt,openany]{book}
+
+% ============= PACOTES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% ============= COLORS
+\definecolor{maincolor}{RGB}{0, 60, 120}
+\definecolor{accentcolor}{RGB}{180, 30, 30}
+\definecolor{lightcolor}{RGB}{230, 240, 255}
+\definecolor{examplecolor}{RGB}{245, 245, 245}
+
+% ============= LINKS
+\hypersetup{
+    colorlinks=true,
+    linkcolor=maincolor,
+    urlcolor=maincolor
+}
+
+% ============= PARAGRAPHS
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ============= HELPERS
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\eps}{\varepsilon}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\dom}{dom}
+
+% ============= CHAPTER STYLE
+\titleformat{\chapter}[display]
+  {\Huge\bfseries\color{maincolor}}
+  {\filleft\Huge\thechapter}
+  {2ex}
+  {\titlerule\vspace{1ex}\filright}
+  [\vspace{1ex}\titlerule]
+
+% ============= HEADER/FOOTER
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{$\sum$ymbolica}
+
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ============= BOX (tcolorbox)
+\tcbset{
+    defstyle/.style={
+        colback=lightcolor,
+        colframe=maincolor,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    thmstyle/.style={
+        colback=green!5,
+        colframe=green!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    examplestyle/.style={
+        colback=examplecolor,
+        colframe=black!50,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    intuitionstyle/.style={
+        colback=yellow!10,
+        colframe=yellow!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    exercise/.style={
+        colback=red!5,
+        colframe=red!60!black,
+        fonttitle=\bfseries,
+        sharp corners
+    }
+}
+
+% ============= ENVIRONMENTS
+\newtcbtheorem[number within=chapter]{definition}{Definição}{defstyle}{def}
+\newtcbtheorem[number within=chapter]{theorem}{Teorema}{thmstyle}{th}
+\newtcbtheorem[number within=chapter]{lemma}{Lema}{thmstyle}{lem}
+\newtcbtheorem[number within=chapter]{corollary}{Corolário}{thmstyle}{cor}
+\newtcbtheorem[number within=chapter]{proposition}{Proposição}{thmstyle}{prop}
+\newtcbtheorem[number within=chapter]{example}{Exemplo}{examplestyle}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Observação}{examplestyle}{rem}
+\newtcbtheorem[number within=chapter]{exercise}{Exercício}{exercise}{exe}
+
+\newtcolorbox{intuitionbox}{
+    intuitionstyle,
+    title=Intuição
+}
+
+\renewcommand{\proofname}{Prova}
+
+% ============= COVER
+\newcommand{\makebookcover}{
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[maincolor] (current page.north west)
+            rectangle ([xshift=4cm]current page.south west);
+    \end{tikzpicture}
+
+    \vspace*{3cm}
+
+    \hspace{4.5cm}
+    \begin{minipage}{0.6\textwidth}
+        {\Huge\bfseries \textcolor{maincolor}{Métodos Numéricos para Equações Diferenciais} \par}
+        \vspace{0.5cm}
+        {\Large Notas de Estudo \par}
+
+        \vspace{2cm}
+
+        {\Large $\sum$ymbolica \par}
+
+        \vfill
+
+        {\large \today \par}
+    \end{minipage}
+\end{titlepage}
+}
+
+\usepackage{tikz}
+
+% ============= DOCUMENT
+\begin{document}
+
+\makebookcover
+
+\tableofcontents
+
+\chapter{Fundamentos}
+
+\section{Derivada Numérica}
+\subsection{Diferenças Finitas}
+Uma vez que a definição de $f'(x)$ é dada por
+\[
+    f'(x) = \lim_{\Delta x \to 0} \frac{f(x_0) + \Delta x - f(x_0)}{\Delta x}
+\]
+
+podemos aproximá-la \textbf{numericamente} num ponto qualquer de seu domínio a partir da reta secante entre dois pontos.
+
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Diferença Finita Progressiva}:
+        \[
+            f'(x_0) \approx \frac{f(x_0 + h) - f(x_0)}{h}
+        \]
+    \item \textbf{Diferença Finita Regressiva}:
+        \[
+            f'(x_0) \approx \frac{f(x_0) - f(x_0 + h)}{h}
+        \]
+    \item \textbf{Diferença Finita Centrada}:
+        \[
+            f'(x_0) \approx \frac{f(x_0 + h) - f(x_0 - h)}{2h}
+        \]
+\end{enumerate}
+
+\begin{remark}{Comentário}{}
+    Note que podemos escrever a diferença finita centrada como a média da diferença finita progressiva e regressiva.
+\end{remark}
+
+\begin{example}{}{}
+
+Aproxime a derivada de $f(x) = \ln x$ em $x_0 = 2$.
+
+\textbf{Caso 1: $h = 0.1$}
+
+\begin{enumerate}[label=(\roman*)]
+    \item Diferença progressiva:
+    \[
+        f'(2) \approx \frac{\ln 2.1 - \ln 2}{0.1} \approx 0.487902
+    \]
+
+    \item Diferença regressiva:
+    \[
+        f'(2) \approx \frac{\ln 2 - \ln 1.9}{0.1} \approx 0.512933
+    \]
+
+    \item Diferença centrada:
+    \[
+        f'(2) \approx \frac{\ln 2.1 - \ln 1.9}{2 \cdot 0.1} \approx 0.500417
+    \]
+\end{enumerate}
+
+\vspace{1em}
+
+\textbf{Caso 2: $h = 0.01$}
+
+\begin{enumerate}[label=(\roman*)]
+    \item Diferença progressiva:
+    \[
+        f'(2) \approx \frac{\ln 2.01 - \ln 2}{0.01} \approx 0.498754
+    \]
+
+    \item Diferença regressiva:
+    \[
+        f'(2) \approx \frac{\ln 2 - \ln 1.99}{0.01} \approx 0.501254
+    \]
+
+    \item Diferença centrada:
+    \[
+        f'(2) \approx \frac{\ln 2.01 - \ln 1.99}{2 \cdot 0.01} \approx 0.500004
+    \]
+\end{enumerate}
+
+\end{example}
+
+Uma outra forma de visualizar as diferenças divididas é através de \textbf{Operadores de Diferenças}.
+A diferença dividida do \textbf{Método de Newton} de dois pontos é uma diferença finita:
+\[
+    D_+f(x) = \frac{f(x + h) - f(x)}{h}
+\]
+\[
+    D_-f(x) = \frac{f(x) - f(x-h)}{h},
+\]
+\[
+    D_of(x) = \frac{f(x + h) - f(x - h)}{2h}
+\]
+
+\begin{remark}{Comentário}{}
+    Note que
+    \[
+        D_of(x) = \frac{1}{2}\left[ D_+f(x) - D_-f(x) \right]
+    \]
+\end{remark}
+
+Podemos aplicar sucessivos operadores para obter derivadas de ordem mais alta.
+Aplicando $D_+$ e em seguida $D_-$ à função $f$ teremos
+\[
+    \begin{aligned}
+        D^2f(x) &= D_-\left( D_+f(x) \right) \\
+        &= D_-\left( \frac{f(x + h) - f(x)}{h} \right) \\
+        &= \frac{1}{h}\left( D_-f(x + h) - D_-f(x) \right) \\
+        &= \frac{1}{j}\left[ \left(\frac{f(x + h) - f(x)}{h}\right) - \left( \frac{f(x) - f(x + h)}{h} \right) \right] \\
+        &= \frac{1}{h^2}\left[ f(x + h) - 2f(x) + f(x - h) \right]
+    \end{aligned}
+\]
+
+Temos então que
+\[
+    f''(x) \approx \frac{1}{h^2}\left[ f(x + h) - 2f(x) + f(x - h) \right]
+\]
+
+\begin{remark}{Comentário}{}
+    Essa é a chamada diferença finita centrada para a 2º derivada.
+\end{remark}
+
+Valem também as seguintes igualdades
+\[
+    D_+[D_-f(x)] = D_-[D_+f(X)] = D^2_o\left[ \frac{h}{2} \right]f(x)
+\]
+
+em que $D^2_o\left[\frac{h}{2}\right]$ representa a diferença dividida centrada a um passo de $\frac{h}{2}$.
+A prova dessa igualdade está disponível no material complementar.
+
+Por fim, podemos ainda obter as diferenças divididas através da \textbf{Série De Taylor}.
+Abaixo, a série para a função $f$ ao redor do ponto $x_0$:
+\[
+f(x) = \sum_{n=0}^{\infty} f^{(n)}(x_0)\frac{(x - x_0)^n}{n!}
+\]
+
+Para um passo à frente, tomando $x - x_0 = h$, temos
+\begin{equation}\label{cap_1:progressive_division_difference}
+    f(x_0 + h) \approx f(x_0) + f'(x_0)h + f''(x_0)\frac{h^2}{2} + f'''(x_0)\frac{h^3}{3!}.
+\end{equation}
+
+Observe que, parando na primeira ordem, obtemos a diferença dividida progressiva
+\[
+    f(x_0 + h) \approx f(x_0) + f'(x_0)h \Rightarrow f'(x_0) \approx \frac{f(x_0 + h) - f(x_0)}{h}.
+\]
+
+Para um passo atrás, tomando $x - x_0 = -h$, temos
+\begin{equation}\label{cap_1:regressive_division_difference}
+    f(x_0 - h) \approx f(x_0) - f'(x_0)h + f''(x_0)\frac{h^2}{2} - f'''(x_0)\frac{h^3}{3!}.
+\end{equation}
+
+Observe que, parando na primeira ordem, obtemos a diferença dividida regressiva
+\[
+    f'(x_0) \approx \frac{f(x_0) - f(x_0 - h)}{h}
+\]
+
+Podemos também subtrair \ref{cap_1:regressive_division_difference} de \ref{cap_1:progressive_division_difference} até segunda ordem, obtendo
+\[
+    f'(x_0) \approx \frac{f(x_0 + h) - f(x_0 - h)}{2h}.
+\]
+
+Somando-as até segunda ordem, obtemos
+\[
+    f''(x_0) \approx \frac{f(x_0 + h) - 2f(x_0) + f(x_0 - h)}{h^2}.
+\]
+
+As demais derivadas podem ser obtidas de forma similares.
+Abaixo, são apresentadas as fórmulas gerais para as diferenças finitas:
+
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Diferença Progressiva}:
+        \[
+            f^{(n)}(x) \approx \frac{1}{h^{n}}\left[ \sum_{k = 0}^{n} (-1)^{n - k} \binom{n}{k} f(x + kh) \right]
+        \]
+    \item \textbf{Diferença Regressiva}:
+        \[
+            f^{(n)}(x) \approx \frac{1}{h^{n}}\left[ \sum_{k = 0}^{n} (-1)^{k} \binom{n}{k} f(x - kh) \right]
+        \]
+    \item \textbf{Diferença Centrada}:
+        \[
+            f^{(n)}(x) \approx \frac{1}{h^{n}}\left[ \sum_{k = 0}^{n} (-1)^{k} f\left( x + \left(\frac{n}{2} - k \right)h \right) \right]
+        \]
+\end{enumerate}
+
+\begin{example}{}{}
+    Aproxime $f^{(3)}(x)$ para $f(x) = \sin(x)$ em $x_0 = 2$ para $h = 0.01$.
+
+    \vspace{1em}
+
+    \textbf{Solução:}
+    \begin{enumerate}[label=(\roman*)]
+        \item \textbf{Diferença progressiva}:
+        
+            Note que, pela fórmula geral, temos:
+            \[
+                f^{(3)}(x) \approx \frac{1}{h^{3}}\left[ -f(x) + 3f(x + h) - 3f(x + 2h) + f(x + 3h) \right].
+            \]
+            Portanto:
+            \[
+                \begin{aligned}
+                    \sin^{(3)}(x) &\approx \frac{1}{0.01^3}\left[ -\sin(2) + 3\sin(2.01) - 3\sin(2.02) + \sin(2.03) \right] \\
+                    &\approx 0.42973359937
+                \end{aligned}
+            \]
+        
+        \item \textbf{Diferença regressiva}:
+            
+            Note que, pela fórmula geral, temos:
+            \[
+                f^{(3)}(x) \approx \frac{1}{h^{3}}\left[ f(x) - 3f(x + h) + 3f(x + 2h) - f(x + 3h) \right].
+            \]
+            Portanto:
+            \[
+                \begin{aligned}
+                    \sin^{(3)}(x) &\approx \frac{1}{0.01^3}\left[ \sin(2) - 3\sin(2.01) + 3\sin(2.02) - \sin(2.03) \right] \\
+                    &\approx 0.40245604027
+                \end{aligned}
+            \]
+
+        \item \textbf{Diferença centrada}:
+        
+            Note que, pela fórmula geral, temos:
+            \[
+                f^{(3)}(x) \approx \frac{1}{h^{3}}\left[ f\left(x + \frac{3}{2}h\right) - 3f\left(x + \frac{1}{2}h\right) + 3f\left(x + \frac{1}{2}h\right) \right].
+            \]
+            Portanto:
+            \[
+                \begin{aligned}
+                    \sin^{(3)}(x) &\approx \frac{1}{0.01^3}\left[ \sin(2.015) - 3\sin(2.005) + 3\sin(1.995) - \sin(1.985) \right] \\
+                    &\approx 0.41614163437
+                \end{aligned}
+            \]
+    \end{enumerate}
+
+    Lembrando que
+    \[
+        \sin^{(3)}(2) = -\cos(2) \approx 0.41614683655
+    \]
+\end{example}
+
+Para derivadas de ordem ímpar podemos ainda construir fórmulas de diferença finitas centradas com passos com coeficientes inteiros.
+Tomemos a média entre $f^{(n)}\left(x + \frac{h}{2}\right)$ e $f^{(n)}\left(x - \frac{h}{2}{}\right)$:
+\[
+    ...
+\]
+
+\begin{example}{}{}
+    Para a derivada terceira da $f$ a um passo h, temos
+    \[
+        \begin{aligned}
+        f^{(3)}(x)
+        &\approx \frac{1}{2}\left[
+            f^{(3)}\left(x + \frac{h}{2}\right)
+            + f^{(3)}\left(x - \frac{h}{2}\right)
+        \right]
+        \\[6pt]
+        &\approx \frac{1}{2h^{3}}
+        \Bigl[
+            \bigl(
+                f(x + 2h)
+                - 3f(x + h)
+                + 3f(x)
+                - f(x - h)
+            \bigr)
+        \\
+        &\qquad\qquad
+            +
+            \bigl(
+                f(x + h)
+                - 3f(x)
+                + 3f(x - h)
+                - f(x - 2h)
+            \bigr)
+        \Bigr]
+        \\[6pt]
+        &= \frac{1}{2h^{3}}
+        \left[
+            f(x + 2h)
+            - 2f(x + h)
+            + 2f(x - h)
+            - f(x - 2h)
+        \right]
+        \end{aligned}
+    \]
+
+    Aproximando, novamente, $\sin^{(3)}(2)$, agora através da fórmula apresentada, obtemos
+    \[
+        \begin{aligned}
+            \sin^{(3)}(2) &\approx \frac{1}{2 \cdot 0.01^3} \left[ \sin(2.02) - 2\sin(2.01) + 2\sin(1.99) - \sin(1.98) \right] \\
+            &\approx 0.41613643292
+        \end{aligned}
+    \]
+\end{example}
+
+\subsection{Diferenças Finitas a partir de Dados Tabelados}
+Seja a seguinte tabela de dados:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        $x_i$ & $y_i$ \\
+        \midrule
+        $x_1$ & $y_1$ \\
+        $x_2$ & $y_2$ \\
+        $\vdots$ & $\vdots$ \\
+        $x_n$ & $y_n$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+podemos aplicar, quando $x_{i + 1} - x_i = h, \forall i = 1, 2, \dots, n - 1$, os conhecimentos obtidos no capítulo.
+Observada a restrição de que, para $y'_1$, deve-se utilizar a aproximação progressiva e, para $y'_n$, a regressiva.
+
+\begin{example}{}{}
+    Dada a tabela abaixo, aproxime $y'_i$ através dos métodos aprendidos.
+
+    \begin{center}
+        \begin{tabular}{cc}
+            \toprule
+            $x_i$ & $y_i$ \\
+            \midrule
+            $2.1$ & $0.7419$ \\
+            $2.2$ & $0.7885$ \\
+            $2.3$ & $0.8325$ \\
+            $2.4$ & $0.8755$ \\
+            $2.5$ & $0.9163$ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+
+    \vspace{1em}
+
+    \textbf{Solução:}
+    A construção da tabela abaixo segue as fórmulas anteriores.
+    Cabe o leitor verificar a corretude.
+
+    \begin{center}
+        \begin{tabular}{ccc}
+            \toprule
+            $x_i$ & $y_i$ & $y'_i$ \\
+            \midrule
+            $2.1$ & $0.7419$ & $0.466$ \\
+            $2.2$ & $0.7885$ & $0.458$ \\
+            $2.3$ & $0.8325$ & $0.435$ \\
+            $2.4$ & $0.8755$ & $0.417$ \\
+            $2.5$ & $0.9163$ & $0.408$ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+
+    \textbf{Observação:} Note que, agora, uma vez obtidos $y'_i$, podemos utilizá-los para obtermos $y''_i$ e, de forma iterativa, derivadas de ordem superiores.
+\end{example}
+
+\subsection{Melhorando a Precisão}
+Uma vez que a primeira derivada faz uso de apenas dois pontos, é necessário tomar um passo cada vez menor.
+No entanto, o esforço computacional pode, por vezes, explodir rapidamente, como será visto mais adiante.
+Dito isso, podemos aproximar a primeira derivada através da Série de Taylor truncada em segunda ordem:
+\[
+    f(x + h) \approx f(x) + f'(x)h + f''(x)\frac{h^{2}}{2}
+\]
+no entanto, sabemos que
+\[
+    f''(x) \approx \frac{1}{h^{2}}\Bigl[ f(x + h) - 2f(x) + f(x - h) \Bigr].
+\]
+Portanto,
+\[
+    f'(x) \approx \frac{1}{2h}\Bigl[ -3f(x) + 4f(x + h) - f(x + 2h) \Bigr]
+\]
+para a progressiva, e, para a regressiva,
+\[
+    f'(x) \approx \frac{1}{2h}\Bigl[ 3f(x) - 4f(x - h) + f(x - 2) \Bigr]
+\]
+
+Isso é particularmente útil para dados tabelados, uma vez que a diferença finita regressiva e progressiva apresentada anteriormente é de primeira ordem.
+
+\end{document}
