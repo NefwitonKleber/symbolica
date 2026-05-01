@@ -23,20 +23,6 @@ A ideia é manter um ambiente aberto para aprendizado,
 organização de conhecimento e possível colaboração futura.
 
 ------------------------------------------------------------
-ESTRUTURA DO REPOSITÓRIO
-------------------------------------------------------------
-
-```text
-notes/         -> Notas de estudo
-exercises/     -> Exercícios resolvidos e comentados
-experiments/   -> Experimentos computacionais e simulações
-macros/        -> Macros e definições reutilizáveis em LaTeX
-templates/     -> Templates para documentos
-assets/        -> Diagramas, imagens e recursos visuais
-scripts/       -> Scripts auxiliares
-```
-
-------------------------------------------------------------
 TECNOLOGIAS UTILIZADAS
 ------------------------------------------------------------
 
