@@ -1,0 +1,427 @@
+\documentclass[12pt,openany]{book}
+
+% ============= PACOTES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% ============= COLORS
+\definecolor{maincolor}{RGB}{0, 60, 120}
+\definecolor{accentcolor}{RGB}{180, 30, 30}
+\definecolor{lightcolor}{RGB}{230, 240, 255}
+\definecolor{examplecolor}{RGB}{245, 245, 245}
+
+% ============= LINKS
+\hypersetup{
+    colorlinks=true,
+    linkcolor=maincolor,
+    urlcolor=maincolor
+}
+
+% ============= PARAGRAPHS
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ============= HELPERS
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\NewDocumentCommand{\mR}{o m}{%
+  \IfValueTF{#1}
+    {M_{#1 \times #2}}
+    {M_{#2}}
+}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\tr}{Tr}
+
+% ============= CHAPTER STYLE
+\titleformat{\chapter}[display]
+  {\Huge\bfseries\color{maincolor}}
+  {\filleft\Huge\thechapter}
+  {2ex}
+  {\titlerule\vspace{1ex}\filright}
+  [\vspace{1ex}\titlerule]
+
+% ============= HEADER/FOOTER
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{$\sum$ymbolica}
+
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ============= BOX (tcolorbox)
+\tcbset{
+    defstyle/.style={
+        colback=lightcolor,
+        colframe=maincolor,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    thmstyle/.style={
+        colback=green!5,
+        colframe=green!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    examplestyle/.style={
+        colback=examplecolor,
+        colframe=black!50,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    intuitionstyle/.style={
+        colback=yellow!10,
+        colframe=yellow!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    exercise/.style={
+        colback=red!5,
+        colframe=red!60!black,
+        fonttitle=\bfseries,
+        sharp corners
+    }
+}
+
+% ============= ENVIRONMENTS
+\newtcbtheorem[number within=chapter]{definition}{Definição}{defstyle}{def}
+\newtcbtheorem[number within=chapter]{theorem}{Teorema}{thmstyle}{th}
+\newtcbtheorem[number within=chapter]{lemma}{Lema}{thmstyle}{lem}
+\newtcbtheorem[number within=chapter]{corollary}{Corolário}{thmstyle}{cor}
+\newtcbtheorem[number within=chapter]{proposition}{Proposição}{thmstyle}{prop}
+\newtcbtheorem[number within=chapter]{example}{Exemplo}{examplestyle}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Observação}{examplestyle}{rem}
+\newtcbtheorem[number within=chapter]{notation}{Notação}{examplestyle}{not}
+\newtcbtheorem[number within=chapter]{exercise}{Exercício}{exercise}{exe}
+
+\newtcolorbox{intuitionbox}{
+    intuitionstyle,
+    title=Intuição
+}
+
+\renewcommand{\proofname}{Prova}
+
+% ============= COVER
+\newcommand{\makebookcover}{
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[maincolor] (current page.north west)
+            rectangle ([xshift=4cm]current page.south west);
+    \end{tikzpicture}
+
+    \vspace*{3cm}
+
+    \hspace{4.5cm}
+    \begin{minipage}{0.6\textwidth}
+        {\Huge\bfseries \textcolor{maincolor}{Álgebra Linear \\Computacional} \par}
+        \vspace{0.5cm}
+        {\Large Notas de Estudo \par}
+
+        \vspace{2cm}
+
+        {\Large $\sum$ymbolica \par}
+
+        \vfill
+
+        {\large \today \par}
+    \end{minipage}
+\end{titlepage}
+}
+
+\usepackage{tikz}
+
+% ============= DOCUMENT
+\begin{document}
+
+\makebookcover
+
+\frontmatter
+
+\tableofcontents
+
+\chapter*{Notação e Convenções}
+\addcontentsline{toc}{chapter}{Notação e Convenções}
+\subsection*{Matrizes e Vetores}
+Representaremos o conjunto das matrizes com entradas reais $M_{m \times n}(\R)$ simplesmente por $M_{m \times n}$.
+E, caso $m = n$, simplifica-se para $M_n$.
+Caso necessário o uso dos complexos, será explicitado no texto o ambiente.
+
+Seja $A \in M_{m \times n}$ uma matriz qualquer, ela pode ser representada através das seguintes formas:
+
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Padrão:}
+        \[
+            A = \begin{bmatrix}
+                    a_{11} & a_{12} & \cdots & a_{1n} \\
+                    a_{21} & a_{22} & \cdots & a_{2n} \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    a_{m1} & a_{m2} & \cdots & a_{mn}
+                \end{bmatrix}
+        \]
+
+    \item \textbf{Forma Coluna:}
+        \[
+            A = \begin{bmatrix}
+                    a_1 & a_2 & \cdots & a_n
+                \end{bmatrix}
+            \quad \text{e} \quad
+            a_i =   \begin{bmatrix}
+                        a_{11} \\
+                        a_{21} \\
+                        \vdots \\
+                        a_{m1}
+                    \end{bmatrix}
+        \]
+    \item \textbf{Forma Linha:}
+        \[
+            A = \begin{bmatrix}
+                    l_1^\top \\
+                    l_2^\top \\
+                    \vdots \\
+                    l_m^\top
+                \end{bmatrix}
+            \quad\text{e}\quad
+            l_i =   \begin{bmatrix}
+                        l_{i1} \\
+                        l_{i2} \\
+                        \vdots \\
+                        l_{in}
+                    \end{bmatrix}
+        \]
+\end{enumerate}
+
+\subsubsection*{Produto entre Matrizes}
+Seja $A \in M_{m \times p}$ e $B \in M_{p \times n}$.
+O produto matricial $AB$ será representado por
+\[
+    AB =    \begin{bmatrix}
+                Ab_1 & Ab_2 & \cdots & Ab_n
+            \end{bmatrix}
+\]
+ou ainda, para
+\[
+    A = \begin{bmatrix}
+            a_1 & a_2 & \cdots & a_p
+        \end{bmatrix}
+    \quad \text{e} \quad
+    B = \begin{bmatrix}
+            l_1^\top \\
+            l_2^\top \\
+            \vdots \\
+            l_p^\top
+        \end{bmatrix}
+\]
+temos
+\[
+    AB = \sum_{i = 1}^{p }a_il_i^\top
+\]
+
+\chapter*{Operadores}
+\addcontentsline{toc}{chapter}{Operadores}
+\section*{Traço}
+\begin{definition}{Traço}{}
+    Dada $A \in M_n$ definimos $\tr \colon M_n \to \R$ como
+    \[
+        \tr(A) = \sum_{i = 1}^{n} a_{ii}
+    \]
+\end{definition}
+
+\begin{theorem}{$\tr(A^\top A) = \tr(AA^\top)$}{}
+    Dada $A \in M_n$, então é válida a seguinte igualdade
+    \[
+        \tr(A^\top A) = \tr(AA^\top)
+    \]
+\end{theorem}
+
+\mainmatter
+
+\chapter{Normas}
+\section{Norma de Vetores}
+Norma de vetores introduzem uma noção de métrica no espaço vetorial.
+A seguir, é apresentada a definição de norma de vetores.
+
+\begin{definition}{Norma de Vetores}{}
+    Uma norma vetorial em $\R^n$ é uma função $\norm{\cdot} \colon \R^n \to \R^+$ que satisfaz as seguintes propriedades.
+    Para quaisquers $x, y \in \R^n$, valem:
+
+    \begin{enumerate}[label=\roman*)]
+        \item $\norm{x} \geq 0$ e $\norm{x} = 0 \Leftrightarrow x = 0$
+        \item $\norm{\alpha x} = \abs{\alpha}\norm{x}$, $\alpha \in \R$
+        \item $\norm{x + y} \leq \norm{x} + \norm{y}$
+    \end{enumerate}
+\end{definition}
+
+\begin{exercise}{}{}
+    Verifique que as normas apresentadas abaixo são de fato normas vetoriais.
+
+    \begin{enumerate}[label=\arabic*)]
+        \item $\norm{x}_p = \Bigl( \sum_{i = 1}^n \abs{x_i}^p \Bigr)^{\frac{1}{p}}$
+        \item $\norm{x}_\infty = \max_{1 \leq i \leq n} \abs{x_i}$
+    \end{enumerate}
+\end{exercise}
+
+Ainda com relação a norma de vetores, valem algumas propriedades:
+\begin{enumerate}[label=P\arabic*)]
+    \item $\norm{x}_2 \leq \norm{x}_1 \leq \sqrt{n}\norm{x}_2$
+    \item $\norm{x}_\infty \leq \norm{x}_2 \leq \sqrt{n}\norm{x}_\infty$
+    \item $\norm{x}_\infty \leq \norm{x}_1 \leq n\norm{x}_\infty$
+\end{enumerate}
+
+Vale relembrar ainda o \textbf{produto interno}, apresentado abaixo.
+
+\begin{definition}{Produto Interno}{}
+    Um produto interno sobre um espaço vetorial $V$ é uma função $\inner{\cdot}{\cdot} \colon V \times V \to \R$ que satisfaz as seguintes propriedades.
+    Para quaisquers $x, y, z \in V$, valem
+
+    \begin{enumerate}[label=\roman*)]
+        \item $\inner{x}{x} \geq 0$, $\inner{x}{x} = 0 \Leftrightarrow x = 0$;
+        \item $\inner{x}{y} = \inner{y}{x}$;
+        \item $\inner{\alpha x}{y} = \alpha \inner{x}{y}$;
+        \item $\inner{x}{y + z} = \inner{x}{y} + \inner{x}{z}$.
+    \end{enumerate}
+\end{definition}
+
+Um dos importantes resultados para produtos internos é a \textbf{desigualdade de Cauchy Scharwz} que será utilizado ao longo dos capítulos.
+
+\begin{theorem}{Desigualdade de Cauchy Scharwz}{}
+    Dados $x, y \in V$, $\inner{x}{y} \not= 0$, vale
+    \[
+        \abs{\inner{x}{y}} \leq \norm{x}\norm{y}
+    \]
+\end{theorem}
+
+\begin{proof}
+    Note que, para $\alpha \in \R$,
+    \[
+        \begin{aligned}
+            0 &\leq \inner{x + \alpha y}{x + \alpha y} \\
+            &= \inner{x}{x} + 2\alpha\inner{x}{y} + \alpha^2\inner{y}{y} \\
+        \end{aligned}
+    \]
+    Tome então $\alpha = -\frac{\inner{x}{x}}{\inner{x}{y}}$ e, portanto,
+    
+    \textbf{TODO}
+\end{proof}
+
+\begin{exercise}{}{}
+    Verifique que
+    \[
+        \lim_{p \to \infty} \norm{x}_p = \norm{x}_\infty
+    \]
+\end{exercise}
+
+\section{Norma de Matrizes}
+Uma vez que as normas de vetores está bem definida, é possível também definir normas matriciais.
+
+\begin{definition}{Norma Matricial}{}
+    Dizemos que $f \colon M_{m \times n} \to \R$ é uma norma matricial se valem as seguintes propriedades
+    \begin{enumerate}[label=\roman*)]
+        \item $f(A) \geq 0, \forall A \in M_{m \times n}$ e $f(A) = 0 \iff A = 0$
+        \item $f(\alpha A) = \abs{\alpha}f(A)$, $\alpha \in \R$
+        \item $f(A + B) \leq f(A) + f(B)$
+    \end{enumerate}
+\end{definition}
+
+Dada $A \in M_{m \times n}$, são exemplos de normas matriciais
+\begin{enumerate}[label=\arabic*)]
+    \item $\norm{A}_F = \sup_{x \not= 0} \frac{\norm{Ax}_p}{\norm{x}_p} = \max_{\norm{x}_p = 1} \norm{Ax}_p = \sqrt{\tr(A^\top A)}$ (Norma de Frobenius)
+    \item $\norm{A}_\infty = \max_{x \not= 0} \frac{\norm{Ax}_\infty}{\norm{x}_\infty}$
+    \item $\norm{A}_1 = \max_{x \not= 0} \frac{\norm{Ax}_1}{\norm{x}_1}$
+\end{enumerate}
+
+\begin{exercise}{}{}
+    Prove que os exemplos anteriores são de fato normas matriciais.
+\end{exercise}
+
+Uma vez definida uma norma matricial, podemos classificá-la em \textbf{consistente} ou \textbf{não consistente}.
+
+\begin{definition}{Norma Consistente}{}
+    Uma normal matricial $\norm{\cdot}$ é consistente se dadas $A \in \mR[m]{p}$ e $B \in \mR[p]{n}$ vale
+    \[
+        \norm{AB} \leq \norm{A}\norm{B}
+    \]
+\end{definition}
+
+\begin{exercise}{}{}
+    Verifique que
+    \[
+        \norm{A} = \max_{\substack{1 \leq i \leq m \\ 1 \leq j \leq n}} \abs{a_{ij}}
+    \]
+    não é consistente.
+\end{exercise}
+
+\begin{exercise}{Norma induzida}{}
+    Mostre que
+    \[
+    \norm{Ax} \leq \norm{A}\norm{x}
+    \]
+    para toda matriz $A$ e vetor $x$.
+\end{exercise}
+
+
+Verifiquemos que $\norm{\cdot}_p$ é consistente.
+De fato, seja $A \in M_{m \times n}$, então
+\[
+    \norm{A}_p = \sup_{x \not= 0} \frac{\norm{Ax}_p}{\norm{x}_p},
+\]
+por outro lado,
+\[
+    \norm{Ax}_p \leq \norm{A}_p\norm{x}_p.
+\]
+Assim, uma vez que $Bx$ é um vetor,
+\[
+    \norm{AB}_p \leq \norm{A}_p\norm{Bx}_p \leq \norm{A}_p\norm{B}_p\norm{x}_p.
+\]
+Portanto,
+\[
+    \frac{\norm{ABx}_p}{\norm{x}_p} \leq \norm{A}_p \norm{B}_p \implies \sup_{x \not= 0} \frac{\norm{ABx}_p}{\norm{x}_p} \leq \norm{A}_p \norm{B}_p.
+\]
+Logo, $\norm{\cdot}_p$ é consistente.
+
+Também é possível mostrar que $\norm{\cdot}_F$ é consistente.
+Note que, dadas $A \in M_{m \times p}, B \in M_{p \times n}$, $AB = C \in M_{m \times n}$ e
+\[
+    c_{ij} = \sum_{k = 1}^{p} a_{ik}b_{kj}.
+\]
+Assim,
+\[
+    \begin{aligned}
+        \norm{C}_F &= \left[ \sum_{i = 1}^{m} \sum_{j = 1}^{n} \left\vert \sum_{k = 1}^{p} a_{ik}b_{kj} \right\vert^2 \right]^\frac{1}{2} \\
+        &\leq \left[ \sum_{i = 1}^{m} \sum_{j = 1}^{n} \left\vert \left( \sum_{k = 1}^{p} \abs{a_{ik}}^2 \right)^\frac{1}{2} \left( \sum_{k = 1}^{p} \abs{b_{kj}}^2 \right)^\frac{1}{2} \right\vert^2 \right]^\frac{1}{2} \\
+        &= \left[ \sum_{i = 1}^{m} \sum_{j = 1}^{n} \left( \left( \sum_{k = 1}^{p} \abs{a_{ik}}^2 \right)^\frac{1}{2} \left( \sum_{k = 1}^{p} \abs{b_{kj}}^2 \right)^\frac{1}{2} \right)^2 \right]^\frac{1}{2} \\
+        &= \left[ \left( \sum_{i = 1}^{m} \sum_{k = 1}^{p} \abs{a_{ik}}^2 \right) \left( \sum_{j = 1}^{n} \sum_{k = 1}^{p} \abs{b_{kj}^2} \right) \right] \\
+        &= \norm{A}_f \norm{B}_F
+    \end{aligned}
+\]
+Portanto, $\norm{\cdot}_F$ é, também, uma norma matricial consistente.
+
+\end{document}
