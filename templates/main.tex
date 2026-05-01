@@ -93,6 +93,12 @@
         colframe=yellow!50!black,
         fonttitle=\bfseries,
         sharp corners
+    },
+    exercise/.style={
+        colback=red!5,
+        colframe=red!60!black,
+        fonttitle=\bfseries,
+        sharp corners
     }
 }
 
@@ -104,6 +110,7 @@
 \newtcbtheorem[number within=chapter]{proposition}{Proposição}{thmstyle}{prop}
 \newtcbtheorem[number within=chapter]{example}{Exemplo}{examplestyle}{ex}
 \newtcbtheorem[number within=chapter]{remark}{Observação}{examplestyle}{rem}
+\newtcbtheorem[number within=chapter]{exercise}{Exercício}{exercise}{exe}
 
 \newtcolorbox{intuitionbox}{
     intuitionstyle,
@@ -211,5 +218,9 @@ coordinates {
 
 \end{axis}
 \end{tikzpicture}
+
+\begin{exercise}{Sample}{}
+    Exercício...
+\end{exercise}
 
 \end{document}
