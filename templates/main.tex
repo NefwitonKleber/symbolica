@@ -1,0 +1,215 @@
+\documentclass[12pt,openany]{book}
+
+% ============= PACKAGES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% ============= COLORS
+\definecolor{maincolor}{RGB}{0, 60, 120}
+\definecolor{accentcolor}{RGB}{180, 30, 30}
+\definecolor{lightcolor}{RGB}{230, 240, 255}
+\definecolor{examplecolor}{RGB}{245, 245, 245}
+
+% ============= LINKS
+\hypersetup{
+    colorlinks=true,
+    linkcolor=maincolor,
+    urlcolor=maincolor
+}
+
+% ============= PARAGRAPHS
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ============= HELPERS
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\eps}{\varepsilon}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\dom}{dom}
+
+% ============= CHAPTER STYLE
+\titleformat{\chapter}[display]
+  {\Huge\bfseries\color{maincolor}}
+  {\filleft\Huge\thechapter}
+  {2ex}
+  {\titlerule\vspace{1ex}\filright}
+  [\vspace{1ex}\titlerule]
+
+% ============= HEADER/FOOTER
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{$\sum$ymbolica}
+
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ============= BOX (tcolorbox)
+\tcbset{
+    defstyle/.style={
+        colback=lightcolor,
+        colframe=maincolor,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    thmstyle/.style={
+        colback=green!5,
+        colframe=green!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    examplestyle/.style={
+        colback=examplecolor,
+        colframe=black!50,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    intuitionstyle/.style={
+        colback=yellow!10,
+        colframe=yellow!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    }
+}
+
+% ============= ENVIRONMENTS
+\newtcbtheorem[number within=chapter]{definition}{Definição}{defstyle}{def}
+\newtcbtheorem[number within=chapter]{theorem}{Teorema}{thmstyle}{th}
+\newtcbtheorem[number within=chapter]{lemma}{Lema}{thmstyle}{lem}
+\newtcbtheorem[number within=chapter]{corollary}{Corolário}{thmstyle}{cor}
+\newtcbtheorem[number within=chapter]{proposition}{Proposição}{thmstyle}{prop}
+\newtcbtheorem[number within=chapter]{example}{Exemplo}{examplestyle}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Observação}{examplestyle}{rem}
+
+\newtcolorbox{intuitionbox}{
+    intuitionstyle,
+    title=Intuição
+}
+
+\renewcommand{\proofname}{Prova}
+
+% ============= COVER
+\newcommand{\makebookcover}{
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[maincolor] (current page.north west)
+            rectangle ([xshift=4cm]current page.south west);
+    \end{tikzpicture}
+
+    \vspace*{3cm}
+
+    \hspace{4.5cm}
+    \begin{minipage}{0.6\textwidth}
+        {\Huge\bfseries \textcolor{maincolor}{<NOME DA DISCIPLINA>} \par}
+        \vspace{0.5cm}
+        {\Large Notas de Estudo \par}
+
+        \vspace{2cm}
+
+        {\Large $\sum$ymbolica \par}
+
+        \vfill
+
+        {\large \today \par}
+    \end{minipage}
+\end{titlepage}
+}
+
+\usepackage{tikz}
+
+% ============= DOCUMENT
+\begin{document}
+
+\makebookcover
+
+\tableofcontents
+
+\chapter{Fundamentos}
+
+\section{Primeiras ideias}
+
+\begin{definition}{Conjunto}{}
+Um conjunto é uma coleção de elementos.
+\end{definition}
+
+\begin{example}{Exemplo básico}{}
+$\N = \{0,1,2,3,\dots\}$
+\end{example}
+
+\begin{theorem}{Comutatividade da soma}{}
+Se $a, b \in \R$, então $a + b = b + a$.
+\end{theorem}
+
+\begin{proof}
+Segue dos axiomas dos números reais.
+\end{proof}
+
+\begin{intuitionbox}
+A soma não depende da ordem porque estamos apenas "juntando quantidades".
+\end{intuitionbox}
+
+\begin{remark}{Comentário}{}
+Essa propriedade será usada constantemente.
+\end{remark}
+
+\chapter{Mais Conteúdo}
+
+\section{Seção exemplo}
+
+Texto aqui...
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    xlabel = $x$,
+    ylabel = $f(x)$,
+    grid = both,
+    width=10cm,
+    height=6cm
+]
+
+\addplot[domain=0:4, samples=100]{x^2};
+
+\addplot[
+    only marks,
+    mark=*,
+]
+coordinates {
+    (1,1)
+    (2,4)
+};
+
+\addplot[
+    domain=0.5:2.5,
+    dashed
+]
+{3*x - 2};
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}
