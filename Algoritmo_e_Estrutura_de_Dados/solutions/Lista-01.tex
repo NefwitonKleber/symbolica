@@ -1,0 +1,565 @@
+\documentclass[12pt,openany]{book}
+
+% ============= PACKAGES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\usepackage[portuguese,algoruled,lined,longend,linesnumbered]{algorithm2e}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% ============= COLORS
+\definecolor{maincolor}{RGB}{0, 60, 120}
+\definecolor{accentcolor}{RGB}{180, 30, 30}
+\definecolor{lightcolor}{RGB}{230, 240, 255}
+\definecolor{examplecolor}{RGB}{245, 245, 245}
+
+% ============= LINKS
+\hypersetup{
+    colorlinks=true,
+    linkcolor=maincolor,
+    urlcolor=maincolor
+}
+
+% ============= PARAGRAPHS
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ============= HELPERS
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\eps}{\varepsilon}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\dom}{dom}
+
+\newcommand{\drawarray}[1]{
+    \begin{tikzpicture}[
+        cell/.style={
+            draw,
+            minimum width=1cm,
+            minimum height=1cm
+        }
+    ]
+
+    \foreach \v [count=\i from 1] in {#1} {
+
+        \node[cell] (a\i) at (\i,0) {\v};
+
+        \node[below=2pt] at (a\i.south) {\scriptsize \i};
+    }
+
+    \end{tikzpicture}
+}
+
+\SetKwFunction{Print}{Imprima}
+
+\SetKwInput{KwInput}{Entrada}
+\SetKwInput{KwOutput}{Saída}
+
+\SetKwIF{If}{ElseIf}{Else}{se}{então}{senão se}{senão}{fim se}
+
+\SetKwFor{For}{para}{faça}{fim}
+\SetKw{KwTo}{até}
+\SetKwFor{While}{enquanto}{faça}{fim}
+
+\SetKw{Return}{retorne}
+
+\SetKw{KwAnd}{e}
+\SetKw{KwOr}{ou}
+\SetKw{KwNot}{não}
+
+\SetKw{Null}{null}
+\SetKw{True}{verdadeiro}
+\SetKw{False}{falso}
+
+\SetKw{Continue}{continue}
+\SetKw{Break}{break}
+
+\newcommand{\complexity}[2]{
+    \begin{complexitybox}
+        \textbf{Tempo:} $O(#1)$ \par
+        \textbf{Memória:} $O(#2)$
+    \end{complexitybox}
+}
+
+% ============= COUNTERS
+\newcounter{algorithmctr}
+
+% ============= CHAPTER STYLE
+\titleformat{\chapter}[display]
+  {\Huge\bfseries\color{maincolor}}
+  {\filleft\Huge\thechapter}
+  {2ex}
+  {\titlerule\vspace{1ex}\filright}
+  [\vspace{1ex}\titlerule]
+
+% ============= HEADER/FOOTER
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{$\sum$ymbolica}
+
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ============= BOX (tcolorbox)
+\tcbset{
+    defstyle/.style={
+        colback=lightcolor,
+        colframe=maincolor,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    thmstyle/.style={
+        colback=green!5,
+        colframe=green!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    examplestyle/.style={
+        colback=examplecolor,
+        colframe=black!50,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    intuitionstyle/.style={
+        colback=yellow!10,
+        colframe=yellow!50!black,
+        fonttitle=\bfseries,
+        sharp corners
+    },
+    exercise/.style={
+        colback=violet!5,
+        colframe=violet!60!black,
+        fonttitle=\bfseries,
+        sharp corners
+    }
+}
+
+% ============= ENVIRONMENTS
+\newtcbtheorem[number within=chapter]{definition}{Definição}{defstyle}{def}
+\newtcbtheorem[number within=chapter]{theorem}{Teorema}{thmstyle}{th}
+\newtcbtheorem[number within=chapter]{lemma}{Lema}{thmstyle}{lem}
+\newtcbtheorem[number within=chapter]{corollary}{Corolário}{thmstyle}{cor}
+\newtcbtheorem[number within=chapter]{proposition}{Proposição}{thmstyle}{prop}
+\newtcbtheorem[number within=chapter]{example}{Exemplo}{examplestyle}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Observação}{examplestyle}{rem}
+\newtcbtheorem[number within=chapter]{exercise}{Exercício}{exercise}{exe}
+\newtcolorbox{complexitybox}{
+    colback=green!5,
+    colframe=green!50!black,
+    title=Complexidade,
+    fonttitle=\bfseries
+}
+\newtcolorbox[
+    auto counter,
+    number within=section
+]{algorithmbox}[2][]{
+    enhanced,
+    breakable,
+    colback=blue!3,
+    colframe=blue!60!black,
+    fonttitle=\bfseries,
+    title={Algoritmo~\thetcbcounter\;--\;#2},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=2mm,
+    right=2mm,
+    top=1mm,
+    bottom=1mm,
+    #1
+}
+\newtcolorbox{analysisbox}[1][]{
+    enhanced,
+    breakable,
+    colback=yellow!5,
+    colframe=yellow!50!black,
+    fonttitle=\bfseries,
+    title={Análise},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=2mm,
+    right=2mm,
+    top=1mm,
+    bottom=1mm,
+    #1
+}
+\newtcolorbox{intuitionbox}{
+    intuitionstyle,
+    title=Intuição
+}
+\newtcolorbox{taskbox}[1][]{
+    enhanced,
+    breakable,
+    colback=red!3,
+    colframe=red!55!black,
+    fonttitle=\bfseries,
+    title={Tarefa},
+    boxrule=0.8pt,
+    arc=2mm,
+    left=2mm,
+    right=2mm,
+    top=1mm,
+    bottom=1mm,
+    #1
+}
+
+\renewcommand{\proofname}{Prova}
+
+% ============= COVER
+\newcommand{\makebookcover}{
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[maincolor] (current page.north west)
+            rectangle ([xshift=4cm]current page.south west);
+    \end{tikzpicture}
+
+    \vspace*{3cm}
+
+    \hspace{4.5cm}
+    \begin{minipage}{0.6\textwidth}
+        {\Huge\bfseries \textcolor{maincolor}{Algoritmos e Estruturas de Dados} \par}
+        \vspace{0.5cm}
+        {\Large Soluções Comentadas \par}
+
+        \vspace{2cm}
+
+        {\Large $\sum$ymbolica \par}
+
+        \vfill
+
+        {\large \today \par}
+    \end{minipage}
+\end{titlepage}
+}
+
+\usepackage{tikz}
+
+% ============= DOCUMENT
+\begin{document}
+
+\makebookcover
+
+\tableofcontents
+
+\chapter{Lista 01}
+\section{O maior Número Ímpar}
+
+Dada uma lista $L$ contendo $n$ números inteiros.
+
+Por exemplo:
+
+\begin{center}
+    \drawarray{9,42,21,14,28,3,19,32,46,6}
+\end{center}
+
+\begin{taskbox}
+    Imprimir o maior número ímpar armazenado na lista ou, caso não haja, imprimir "Não há ímpar!".
+\end{taskbox}
+
+No exemplo acima, isso nos daria
+\[
+    21
+\]
+
+\subsection*{Soluções}
+
+A ideia principal do algoritmo é fazer uma varredura linear na lista armazenando sempre o maior número ímpar encontrado até o momento numa variável $m$.
+Note que a inicialização de $m$ é fundamental, uma vez que não sabemos se há (e onde estaria) o primeiro número ímpar.
+Nesse sentido, podemos tomar um valor para $m$ que indique que não foi encontrado nenhum número ímpar, como, por exemplo, $m = 0$.
+Após percorrer toda a lista atualizando o valor de $m$ quando encontrado o primeiro ímpar ou quando encontrado algum valor $L[i] > m$, no final teremos ou $m = 0$ e portanto não há nenhum ímpar na lista, ou $m = L[i]$ para algum $1 \leq i \leq n$.
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    
+    \KwInput{Uma lista $L$ com $n$ números inteiros}
+
+    $m \gets 0$
+    
+    \For{$i \gets 1$ \KwTo $n$}{
+        \If{$L[i]$ é ímpar \KwAnd ($m = 0$ \KwOr $L[i] > m$)}{
+            $m \gets L[i]$
+        }
+    }
+
+    \BlankLine
+
+    \If{$m = 0$}{
+        \tcc{Não há nenhum número ímpar na lista}
+        \Print{"Não há ímpar!"}
+    }
+    \Else{
+        \Print{$m$}
+    }
+\end{algorithm}
+
+\complexity{n}{1}
+
+\section{O Segundo Maior Número Ímpar}
+Dada uma lista $L$ contendo $n$ números inteiros.
+
+Por exemplo:
+
+\begin{center}
+    \drawarray{9,42,21,14,28,3,19,32,46,6}
+\end{center}
+
+\begin{taskbox}
+    Imprimir o segundo maior número ímpar armazenado na lista ou, caso não haja, imprimir "Não existe!".
+\end{taskbox}
+
+No exemplo acima, isso nos daria
+\[
+    19
+\]
+
+\subsection*{Soluções}
+\subsubsection*{Varredura Dupla}
+A ideia principal do algoritmo é fazer uma varredura linear na lista armazenando sempre o maior número ímpar encontrado até o momento numa variável $m_1$.
+Note que a inicialização de $m_1$ é fundamental, uma vez que não sabemos se há (e onde estaria) o primeiro número ímpar.
+Nesse sentido, podemos tomar um valor para $m$ que indique que não foi encontrado nenhum número ímpar, como, por exemplo, $m_1 = 0$.
+Após percorrer toda a lista atualizando o valor de $m_1$ quando encontrado o primeiro ímpar ou quando encontrado algum valor $L[i] > m_1$, no final teremos ou $m_1 = 0$ e portanto não há nenhum ímpar na lista, ou $m_1 = L[i]$ para algum $1 \leq i \leq n$.
+Uma vez armazenado o maior número ímpar (se existir, caso não exista, basta retornar), podemos fazer uma outra varredura linear para o segundo maior número ímpar $m_2$, agora verificando, também, se $L[i] < m_1$.
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    
+    \KwInput{Uma lista $L$ com $n$ números inteiros}
+
+    \tcc{Busca pelo maior ímpar}
+
+    $m_1 \gets 0$
+    
+    \For{$i \gets 1$ \KwTo $n$}{
+        \If{$L[i]$ é ímpar \KwAnd ($m_1 = 0$ \KwOr $L[i] > m_1$)}{
+            $m_1 \gets L[i]$
+        }
+    }
+
+    \BlankLine
+
+    \If{$m_1 = 0$}{
+        \tcc{Não há nenhum número ímpar na lista}
+        \Print{"Não há ímpar!"} \\
+        \Return
+    }
+
+    \BlankLine
+
+    \tcc{Busca pelo segundo maior ímpar}
+    
+    $m_2 \gets 0$
+
+    \BlankLine
+
+    \For{$i \gets 1$ \KwTo $n$}{
+        \If{$L[i]$ é ímpar \KwAnd $L[i] < m_1$ \KwAnd ($m_2 = 0$ \KwOr $L[i] > m_2$)}{
+            $m_2 \gets L[i]$
+        }
+    }
+    
+    \BlankLine
+
+    \If{$m_2 = 0$}{
+        \Print{"Não existe!"}
+    }
+    \Else {
+        \Print{$m_2$}
+    }
+\end{algorithm}
+
+\subsubsection*{Varredura Única - Dupla Verificação}
+Uma outra possibilidade é fazer duas verificações ao invés de uma.
+Nesse caso, sempre que encontrarmos um número ímpar checamos primeiramente se ele deve ir para $m_1$ e, caso afirmativo,
+movemos o conteúdo de $m_1$ para $m_2$, caso contrário, checamos se ele deve ir para $m_2$.
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    
+    \KwInput{Uma lista $L$ com $n$ números inteiros}
+
+    \tcc{Busca pelo maior ímpar}
+
+    $m_1 \gets 0$ \\
+    $m_2 \gets 0$
+    
+    \For{$i \gets 1$ \KwTo $n$}{
+        \If{$L[i]$ é par}{
+            \Continue
+        }
+
+        \BlankLine
+
+        \If{$m_1 = 0$ \KwOr $L[i] > m_1$}{
+            $m_2 \gets m_1$ \\
+            $m_1 \gets L[i]$
+        }
+        \ElseIf{$m_2 = 0$ \KwOr $L[i] > m_2$}{
+            $m_2 \gets L[i]$
+        }
+    }
+
+    \BlankLine
+
+    \If{$m_2 = 0$}{
+        \Print{"Não existe!"}
+    }
+    \Else {
+        \Print{$m_2$}
+    }
+\end{algorithm}
+
+\complexity{n}{1}
+
+
+\section{Busca Aproximada}
+Dada uma lista $L$ contendo $n$ números inteiros.
+
+Por exemplo:
+
+\begin{center}
+    \drawarray{9,42,21,14,25,3,19,33,46,6}
+\end{center}
+
+e um número inteiro $k$
+
+\begin{taskbox}
+    Encontrar o número $k$ na lista e imprimir "Encontrei!" ou, caso não esteja presente, encontrar o número mais próximo de $k$ e imprimi-lo.
+\end{taskbox}
+
+No exemplo acima, para $k = 31$, isso nos daria
+\[
+    33
+\]
+
+\subsection*{Soluções}
+\subsubsection*{Varredura Linear}
+Podemos varrer a lista mantendo salvo um índice $j$ (o índice com o valor mais próximo de $k$) e um valor $d_m$ (a diferença absoluta entre o valor mais próximo de $k$ e $k$) de forma que analisemos $d = \text{abs}(L[i] - k)$.
+Caso $d = 0$, então $L[i] = k$ e podemos imprimí-lo e retornar.
+Caso contrário, verifiquemos se $d_m < \text{abs}(L[j] - L[i])$, em caso positivo, salvamos $j = i$ e $d_m = \text{abs}(L[j] - L[i])$.
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    
+    \KwInput{Uma lista $L$ com $n$ números inteiros e um número inteiro $k$}
+
+    $j \gets 0$ \\
+    $d_m \gets 0$ \\
+
+    \For{$i \gets 1$ \KwTo $n$}{
+        $d \gets L[i] - k$ \\
+        \If{$d = 0$}{
+            \Print{"Encontrei!"} \\
+            \Return
+        }
+        \ElseIf{$j = 0$ \KwOr $d_m < \text{abs}(L[j] - L[i])$}{
+            $j \gets i$ \\
+            $d_m \gets \text{abs}(L[j] - L[i])$
+        }
+    }
+
+    \Print{$L[j]$}
+\end{algorithm}
+
+\complexity{n}{1}
+
+
+\section{Ímpar-Ímpar}
+Dada uma lista $L$ contendo $n$ números inteiros.
+
+Por exemplo:
+
+\begin{center}
+    \drawarray{9,2,7,7,2,2,1,7,7,9}
+\end{center}
+
+\begin{taskbox}
+    Verificar se existe algum número ímpar que aparece um número ímpar de vezes na lista imprimindo "Sim", caso haja e "Não" caso contrário.
+\end{taskbox}
+
+No exemplo acima, isso nos daria
+\[
+    1
+\]
+
+\subsection*{Soluções}
+\subsubsection*{Análise Quadrática}
+Podemos percorrer a lista usando dois ponteiros, $i$ e $j$.
+Para cada $1 \leq i \leq n$ tal que $L[i]$ seja ímpar percorremos a lista no intervalo $i + 1 \leq j \leq n$ contando quantos elementos são iguais a $L[i]$ numa variável $c$.
+Caso $c$ seja ímpar, encontramos um número ímpar que satisfaz o problema e podemos imprimir e retornar.
+Caso não encontrado nenhum número, imprimimos que não há.
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    
+    \KwInput{Uma lista $L$ com $n$ números inteiros}
+
+    \For{$i \gets 1$ \KwTo $n$}{
+        $c \gets 1$ \\
+        \For{$j \gets i + 1$ \KwTo $n$}{
+            \If{$L[j] = L[i]$}{
+                $c \gets c + 1$
+            }
+        }
+
+        \BlankLine
+
+        \If{$c$ é ímpar}{
+            \Print{"Sim"} \\
+            \Return
+        }
+    }
+
+    \Print{"Não"}
+\end{algorithm}
+
+\begin{analysisbox}
+    Note que, para cada $1 \leq i \leq n$ percorremos o intervalo $i + 1 \leq j \leq n$.
+    Isso nos dá
+    \[
+        \begin{aligned}
+            \sum_{i = 1}^{n} (n - (i + 1)) &= \sum_{i = 1}^{n} (n - i) - \sum_{i = 1}^{n} 1 \\
+            &= \sum_{i = 1}^{n} i - n \\
+            &= \frac{n(n + 1)}{2} - n \\
+            & = \frac{n^2 - n}{2}
+        \end{aligned}
+    \]
+    Logo,
+    \[
+        O(n^2)
+    \]
+\end{analysisbox}
+
+\complexity{n^2}{1}
+
+\subsubsection*{Algoritmo Misterioso}
+\begin{exercise}{Custo $O(n)$}{}
+    Deixamos como exercício para o leitor a construção de um algoritmo cujo custo assintótico amortizado de tempo é $O(n)$.
+
+    \vspace{1em}
+    
+    \textbf{Observação:} não há restrição quanto ao uso de memória.
+    Mas você pode impor limitações, por exemplo, $\forall 1 \leq i \leq n$, $1 \leq L[i] \leq n$, em suas construções para construções simplificadas.
+\end{exercise}
+
+\end{document}
