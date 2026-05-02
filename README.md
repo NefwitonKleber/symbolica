@@ -64,7 +64,7 @@ Este repositório segue princípios de integridade acadêmica:
 - O material disponibilizado neste repositório não substitui livros-texto, notas oficiais ou qualquer material didático adotado nas disciplinas.
 
 ------------------------------------------------------------
-LICENÇA
+DISCLAIMER
 ------------------------------------------------------------
 Este projeto é independente e não possui qualquer vínculo oficial com:
 - Universidade Federal do Cariri (UFCA)
