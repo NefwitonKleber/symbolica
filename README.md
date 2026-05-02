@@ -71,6 +71,7 @@ Este projeto é independente e não possui qualquer vínculo oficial com:
 - Corpo docente
 - Coordenação de curso
 - Departamentos ou setores institucionais
+
 O conteúdo aqui presente não representa opiniões, materiais ou posicionamentos de professores ou da instituição.
 
 ------------------------------------------------------------
