@@ -57,10 +57,11 @@ INTEGRIDADE ACADÊMICA E USO DE MATERIAL
 ------------------------------------------------------------
 Este repositório segue princípios de integridade acadêmica:
 - Provas, exames e avaliações formais **não são incluídos**, nem suas resoluções.
-- O objetivo desta restrição é preservar a integridade do processo avaliativo, evitando a reprodução direta de avaliações institucionais e possíveis impactos na forma como disciplinas e provas são elaboradas.
-- Materiais de professores (slides, listas, notas de aula (inclusive aquelas apresentadas em lousas)) podem ser utilizados apenas como referência de estudo e nunca reproduzidos integralmente quando protegidos por direitos autorais ou restrições institucionais.
-- Sempre que houver uso de material externo, referências devem ser explicitamente citadas e rapidamente identificáveis.
-- É proibido o plágio de qualquer natureza. Conteúdos devem ser reescritos, compreenidos e reinterpretados.
+- O objetivo desta restrição é preservar a integridade do processo avaliativo, evitando a reprodução direta de avaliações institucionais e a circulação indevida de material avaliativo.
+- Materiais de professores utilizados em contexto acadêmico, incluindo, entre outros, slides, listas e anotações, podem ser utilizados apenas como referência de estudo e nunca reproduzidos integralmente quando protegidos por direitos autorais ou restrições institucionais.
+- Sempre que houver uso de material externo, referências devem ser explicitamente citadas e claramente identificáveis.
+- É proibido o plágio de qualquer natureza. Conteúdos devem ser reescritos, compreendidos e reinterpretados.
+- O material disponibilizado neste repositório não substitui livros-texto, notas oficiais ou qualquer material didático adotado nas disciplinas.
 
 ------------------------------------------------------------
 LICENÇA
